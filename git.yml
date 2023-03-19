@@ -1,0 +1,19 @@
+---
+- hosts: uday
+  user: ansible
+  become: yes
+  connection: ssh
+
+  tasks:
+    - name: checking git
+      shell: rpm -qa | grep git
+      register: git_status 
+      ignore_errors: yes
+
+    - name: if git is installed
+      debug: msg="git is installed" 
+      when: "'git' in git_status.stdout"
+
+    - name: if git is not installed
+      debug: msg="git not installed"
+      when: "'git' not in git_status.stdout"
