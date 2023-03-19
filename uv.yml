@@ -1,0 +1,20 @@
+---
+ - hosts: uday
+   user: ansible
+   become: yes 
+   connection: ssh
+
+   tasks: 
+      - name: check git is installed or not
+        command: git --version
+        register: git_version
+        ignore_errors: yes
+
+      - name : Display git status
+        debug: 
+          msg: "git is installed"
+        when: git_version.rc == 0
+
+      - name: install git 
+        action: yum name=git state=present 
+        when: git_version.rc !=0 
